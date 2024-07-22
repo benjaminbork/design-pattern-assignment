@@ -12,7 +12,8 @@
   "description": "",
   "dependencies": {
     "@clack/prompts": "^0.7.0",
-    "picocolors": "^1.0.1"
+    "picocolors": "^1.0.1",
+    "xmldom": "^0.6.0"
   },
   "devDependencies": {
     "ts-node": "^10.9.2",

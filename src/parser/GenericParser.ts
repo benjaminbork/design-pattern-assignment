@@ -7,10 +7,16 @@ export class GenericParser {
     this.parsers = parsers;
   }
 
-  public parseToFormat(): void {
+  public parseToFormat({
+    data,
+    format,
+  }: {
+    data: string;
+    format: string;
+  }): void {
     this.parsers.forEach((parser) => {
-      if (parser.canHandle()) {
-        parser.parse();
+      if (parser.canHandle({ format })) {
+        parser.parse({ data });
       }
     });
 

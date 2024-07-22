@@ -1,4 +1,4 @@
 export interface ParserInterface {
-  parse(): void;
-  canHandle(): boolean;
+  parse({ data }: { data: string }): string;
+  canHandle({ format }: { format: string }): boolean;
 }

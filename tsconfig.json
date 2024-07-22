@@ -9,7 +9,7 @@
   },
   "include": [
     "*.ts",
-    "src/parser/ParserStates.ts",
-    "src/parser/ParserStateManger.ts"
+    "src/Parser/ParserStates.ts",
+    "src/Parser/ParserStateManager.ts"
   ]
 }
