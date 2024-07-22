@@ -7,12 +7,16 @@ import { ReaderInterface } from "./ReaderInterface";
 import { ParserProccessor } from "./Steps/ParserProcessor";
 import { InputDataProcessor } from "./Steps/InputDataProcessor";
 import { SelectPath } from "./Steps/SelectPath";
+import { DatabaseInterface } from "./DatabaseInterface";
+import { SaveProcessor } from "./Steps/SaveProcessor";
 
 export class ParserStateManager {
+  private db: DatabaseInterface;
   private parsers: ParserInterface[];
   private readers: ReaderInterface[];
   private introduction: ParserIntroduction;
   private parserProcessor: ParserProccessor;
+  private saveProcessor: SaveProcessor;
   private inputDataProcessor: InputDataProcessor;
   private selectParser: SelectParser;
   private selectFormat: SelectFormat;
@@ -26,6 +30,7 @@ export class ParserStateManager {
   private result: string | undefined;
 
   constructor(
+    db: DatabaseInterface,
     parsers: ParserInterface[],
     readers: ReaderInterface[],
     introduction: ParserIntroduction,
@@ -33,8 +38,10 @@ export class ParserStateManager {
     selectFormat: SelectFormat,
     selectPath: SelectPath,
     parserProcessor: ParserProccessor,
+    saveProcessor: SaveProcessor,
     inputDataProcessor: InputDataProcessor
   ) {
+    this.db = db;
     this.parsers = parsers;
     this.readers = readers;
     this.introduction = introduction;
@@ -42,6 +49,7 @@ export class ParserStateManager {
     this.selectFormat = selectFormat;
     this.selectPath = selectPath;
     this.parserProcessor = parserProcessor;
+    this.saveProcessor = saveProcessor;
     this.inputDataProcessor = inputDataProcessor;
   }
 
@@ -97,15 +105,22 @@ export class ParserStateManager {
           this.parsers,
           this.inputData || ""
         );
-        console.log(this.result);
         this.next({ currentState: ParserStates.STATE_PARSER_PARSED });
 
         break;
 
       case ParserStates.STATE_PARSER_PARSED:
-        // this.parserProcessor.output(this.result);
+        await this.saveProcessor.save({
+          data: this.result || "",
+          format: this.selectedFormat || "",
+          database: this.db,
+        });
+        this.next({ currentState: ParserStates.STATE_PARSER_SAVED });
         break;
 
+      case ParserStates.STATE_PARSER_SAVED:
+        console.log("Data saved");
+        break;
       default:
         throw new Error("Invalid state");
     }

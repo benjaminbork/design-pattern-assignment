@@ -22,54 +22,12 @@ export class XMLParserFactory extends AbstractParserFactory {
         }
 
         switch (format) {
-          case "json":
-            const result = this.xmlToJson(doc.documentElement);
-            return JSON.stringify(result);
-
           case "csv":
             return this.xmlToCSV(items);
 
           default:
             throw new Error("Unsupported format");
         }
-      }
-
-      private xmlToJson(xml: Element): any {
-        let obj: any = {};
-
-        if (xml.nodeType === 1) {
-          if (xml.attributes.length > 0) {
-            obj["@attributes"] = {};
-            for (let j = 0; j < xml.attributes.length; j++) {
-              const attribute = xml.attributes.item(j);
-              if (attribute) {
-                obj["@attributes"][attribute.nodeName] = attribute.nodeValue;
-              }
-            }
-          }
-        }
-
-        if (xml.hasChildNodes()) {
-          for (let i = 0; i < xml.childNodes.length; i++) {
-            const item = xml.childNodes.item(i);
-            if (item.nodeType === 1) {
-              const nodeName = item.nodeName;
-              if (typeof obj[nodeName] === "undefined") {
-                obj[nodeName] = this.xmlToJson(item as Element);
-              } else {
-                if (typeof obj[nodeName].push === "undefined") {
-                  const old = obj[nodeName];
-                  obj[nodeName] = [];
-                  obj[nodeName].push(old);
-                }
-                obj[nodeName].push(this.xmlToJson(item as Element));
-              }
-            } else if (item.nodeType === 3) {
-              obj = item.nodeValue;
-            }
-          }
-        }
-        return obj;
       }
 
       private xmlToCSV(items: Element[]): string {

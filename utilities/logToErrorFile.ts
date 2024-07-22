@@ -7,7 +7,5 @@ export function logErrorToFile(errorMessage: string): void {
   const timestamp = new Date().toISOString();
   const logEntry = `${timestamp} - ${errorMessage}\n`;
 
-  console.log(logEntry);
-
   fs.appendFileSync(logFilePath, logEntry);
 }
