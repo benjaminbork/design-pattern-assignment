@@ -40,4 +40,8 @@ export class Prompts implements PromptsInterface {
 
     return input;
   }
+
+  public async outro(outroText: string): Promise<void> {
+    p.outro(`${color.bgMagenta(color.black(outroText))}`);
+  }
 }

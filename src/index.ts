@@ -17,6 +17,7 @@ import { logErrorToFile } from "../utilities/logToErrorFile";
 import { Database } from "./External/db";
 import { DatabaseAdapter } from "./Parsers/DatabaseAdapter";
 import { SaveProcessor } from "./Parsers/Steps/SaveProcessor";
+import { ParserOutro } from "./Parsers/Steps/ParserOutro";
 
 async function main() {
   // Error handling
@@ -32,6 +33,7 @@ async function main() {
   const db = new DatabaseAdapter(new Database());
 
   const introduction = new ParserIntroduction(prompts);
+  const outro = new ParserOutro(prompts);
   const selectParser = new SelectParser(prompts);
   const selectFormat = new SelectFormat(prompts);
   const selectPath = new SelectPath(prompts);
@@ -52,6 +54,7 @@ async function main() {
     parsers,
     readers,
     introduction,
+    outro,
     selectParser,
     selectFormat,
     selectPath,

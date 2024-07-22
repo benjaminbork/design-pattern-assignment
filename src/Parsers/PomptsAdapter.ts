@@ -21,4 +21,8 @@ export class PromptsAdapter implements PromptsInterface {
   public async input(message: string): Promise<string> {
     return await this.prompts.input(message);
   }
+
+  public async outro(outroText: string): Promise<void> {
+    return await this.prompts.outro(outroText);
+  }
 }

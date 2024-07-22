@@ -1,5 +1,6 @@
 import { ParserStates } from "./ParserStates";
 import { ParserIntroduction } from "./Steps/ParserIntroduction";
+import { ParserOutro } from "./Steps/ParserOutro";
 import { SelectParser } from "./Steps/SelectParser";
 import { SelectFormat } from "./Steps/SelectFormat";
 import { ParserInterface } from "./ParserInterface";
@@ -15,6 +16,7 @@ export class ParserStateManager {
   private parsers: ParserInterface[];
   private readers: ReaderInterface[];
   private introduction: ParserIntroduction;
+  private outro: ParserOutro;
   private parserProcessor: ParserProccessor;
   private saveProcessor: SaveProcessor;
   private inputDataProcessor: InputDataProcessor;
@@ -34,6 +36,7 @@ export class ParserStateManager {
     parsers: ParserInterface[],
     readers: ReaderInterface[],
     introduction: ParserIntroduction,
+    outro: ParserOutro,
     selectParser: SelectParser,
     selectFormat: SelectFormat,
     selectPath: SelectPath,
@@ -45,6 +48,7 @@ export class ParserStateManager {
     this.parsers = parsers;
     this.readers = readers;
     this.introduction = introduction;
+    this.outro = outro;
     this.selectParser = selectParser;
     this.selectFormat = selectFormat;
     this.selectPath = selectPath;
@@ -119,7 +123,7 @@ export class ParserStateManager {
         break;
 
       case ParserStates.STATE_PARSER_SAVED:
-        console.log("Data saved");
+        this.outro.outro();
         break;
       default:
         throw new Error("Invalid state");

@@ -1,0 +1,9 @@
+2024-07-22T19:18:58.754Z - /Users/benjamin/Documents/xml-parser/src/External/prompts.ts:38
+      throw new Error("Input must be a string.");
+            ^
+2024-07-22T19:18:58.759Z - Error: Input must be a string.
+    at Prompts.input [90m(/Users/benjamin/Documents/xml-parser/[39msrc/External/prompts.ts:38:13[90m)[39m
+[90m    at processTicksAndRejections (node:internal/process/task_queues:95:5)[39m
+    at async PromptsAdapter.input [90m(/Users/benjamin/Documents/xml-parser/[39msrc/Parsers/PomptsAdapter.ts:22:12[90m)[39m
+    at async SelectPath.input [90m(/Users/benjamin/Documents/xml-parser/[39msrc/Parsers/Steps/SelectPath.ts:11:12[90m)[39m
+    at async ParserStateManager.next [90m(/Users/benjamin/Documents/xml-parser/[39msrc/Parsers/ParserStateManager.ts:89:29[90m)[39m
