@@ -97,9 +97,9 @@ export class ParserStateManager {
           this.parsers,
           this.inputData || ""
         );
+        console.log(this.result);
         this.next({ currentState: ParserStates.STATE_PARSER_PARSED });
 
-        console.log(this.result);
         break;
 
       case ParserStates.STATE_PARSER_PARSED:
