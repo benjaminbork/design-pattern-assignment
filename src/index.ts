@@ -14,9 +14,9 @@ async function main() {
   const introduction = new ParserIntroduction(prompts);
   const selectParser = new SelectParser(prompts);
   const selectFormat = new SelectFormat(prompts);
-  const xmlParser = new XMLParserFactory().createParser();
+  const xmlParserLocal = new XMLParserFactory().createParser();
 
-  const parsers = [xmlParser];
+  const parsers = [xmlParserLocal];
 
   const manager = new ParserStateManager(
     parsers,
@@ -25,16 +25,6 @@ async function main() {
     selectFormat
   );
   manager.next({ currentState: ParserStates.STATE_APP_STARTED });
-
-  // const xml = "<root><item>Hello World</item></root>";
-  // try {
-  //   const parser = XMLLocalParserFactory.createParser();
-  //   const parsedObject = parser.parse(xml);
-  //   console.log(parsedObject);
-  // } catch (error) {
-  //   console.error(error);
-  // }
-  // await setTimeout(1000);
 
   // p.outro(
   //   `${color.bgMagenta(

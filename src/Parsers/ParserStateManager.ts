@@ -11,6 +11,7 @@ export class ParserStateManager {
   private selectFormat: SelectFormat;
   private selectedParser: string | undefined;
   private selectedFormat: string | undefined;
+  private result: string | undefined;
 
   constructor(
     parsers: ParserInterface[],
@@ -54,7 +55,24 @@ export class ParserStateManager {
         break;
 
       case ParserStates.STATE_FORMAT_SELECTED:
-        // create Factory
+        const parser = this.parsers.find((parser) =>
+          parser.canHandle({
+            format: this.selectedFormat || "",
+            parser: this.selectedParser || "",
+          })
+        );
+
+        if (!parser) {
+          throw new Error("Parser not found");
+        }
+
+        this.result = parser.parse({
+          data: "<root><item>Hello World</item></root>",
+          format: this.selectedFormat || "",
+        });
+
+        console.log(this.result);
+        this.next({ currentState: ParserStates.STATE_PARSER_PARSED });
         break;
 
       case ParserStates.STATE_PARSER_INITIALIZED:
