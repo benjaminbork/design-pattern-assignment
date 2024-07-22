@@ -7,5 +7,9 @@
     "skipLibCheck": true,
     "module": "CommonJS"
   },
-  "include": ["*.ts", "src/ParserStates.ts", "src/ParserStateManger.ts"]
+  "include": [
+    "*.ts",
+    "src/parser/ParserStates.ts",
+    "src/parser/ParserStateManger.ts"
+  ]
 }
