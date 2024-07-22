@@ -9,7 +9,6 @@ export class Database implements DatabaseInterface {
     const filename = `../../data-${timestamp}.${parsedDTO.format}`;
     const filePath = path.join(__dirname, filename);
 
-    // Write the CSV data to the file
     fs.writeFile(filePath, parsedDTO.data, { encoding: "utf-8" }, (err) => {
       if (err) {
         console.error("Failed to write CSV file:", err);

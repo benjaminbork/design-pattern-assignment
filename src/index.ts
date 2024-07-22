@@ -64,12 +64,6 @@ async function main() {
   );
 
   manager.next({ currentState: ParserStates.STATE_APP_STARTED });
-
-  // p.outro(
-  //   `${color.bgMagenta(
-  //     color.black(`Thank you for participating. You are now a CLI expert.`)
-  //   )}`
-  // );
 }
 
 main().catch(console.error);
