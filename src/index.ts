@@ -1,4 +1,4 @@
-#!/usr/bin/env node
+#!/usr/bin/env ts-node
 
 import * as p from "@clack/prompts";
 import { setTimeout } from "node:timers/promises";
