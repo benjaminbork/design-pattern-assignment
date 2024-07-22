@@ -38,7 +38,6 @@ export class XMLParserFactory extends AbstractParserFactory {
         let obj: any = {};
 
         if (xml.nodeType === 1) {
-          // Element node
           if (xml.attributes.length > 0) {
             obj["@attributes"] = {};
             for (let j = 0; j < xml.attributes.length; j++) {
@@ -54,7 +53,6 @@ export class XMLParserFactory extends AbstractParserFactory {
           for (let i = 0; i < xml.childNodes.length; i++) {
             const item = xml.childNodes.item(i);
             if (item.nodeType === 1) {
-              // Ensure the node is an Element
               const nodeName = item.nodeName;
               if (typeof obj[nodeName] === "undefined") {
                 obj[nodeName] = this.xmlToJson(item as Element);
@@ -67,7 +65,6 @@ export class XMLParserFactory extends AbstractParserFactory {
                 obj[nodeName].push(this.xmlToJson(item as Element));
               }
             } else if (item.nodeType === 3) {
-              // Text node
               obj = item.nodeValue;
             }
           }
@@ -83,7 +80,6 @@ export class XMLParserFactory extends AbstractParserFactory {
         const headers: Set<string> = new Set();
         const rows: any[] = [];
 
-        // Extract data from XML nodes
         for (let i = 0; i < items.length; i++) {
           const item = items[i];
           const row: any = {};
@@ -91,7 +87,6 @@ export class XMLParserFactory extends AbstractParserFactory {
           for (let j = 0; j < item.childNodes.length; j++) {
             const child = item.childNodes[j];
             if (child.nodeType === 1) {
-              // Element node
               const tagName = child.nodeName;
               headers.add(tagName);
               let textContent = child.textContent?.trim() || "";
@@ -107,7 +102,6 @@ export class XMLParserFactory extends AbstractParserFactory {
           rows.push(row);
         }
 
-        // Build CSV headers and rows
         const headersArray = Array.from(headers);
         const csvRows = [headersArray.join(",")];
 

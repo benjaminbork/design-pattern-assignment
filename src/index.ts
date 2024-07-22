@@ -13,8 +13,17 @@ import { LocalReaderFactory } from "./Parsers/Factories/LocalReaderFactory";
 import { SelectPath } from "./Parsers/Steps/SelectPath";
 import { InputDataProcessor } from "./Parsers/Steps/InputDataProcessor";
 import { WebReaderFactory } from "./Parsers/Factories/WebReaderFactory";
+import { logErrorToFile } from "../utilities/logToErrorFile";
 
 async function main() {
+  console.error = function (...args: any[]) {
+    const errorMessage = args
+      .map((arg) => (typeof arg === "object" ? JSON.stringify(arg) : arg))
+      .join(" ");
+
+    logErrorToFile(errorMessage);
+  };
+
   const prompts = new PromptsAdapter(new Prompts());
   const introduction = new ParserIntroduction(prompts);
   const selectParser = new SelectParser(prompts);
