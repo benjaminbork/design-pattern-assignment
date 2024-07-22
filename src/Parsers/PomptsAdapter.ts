@@ -17,4 +17,8 @@ export class PromptsAdapter implements PromptsInterface {
   ): Promise<string> {
     return await this.prompts.select(options, message);
   }
+
+  public async input(message: string): Promise<string> {
+    return await this.prompts.input(message);
+  }
 }

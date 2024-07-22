@@ -1,17 +1,28 @@
-import { AbstractParserFactory } from "../AbstractParserFactory";
+import { ParserInterface } from "../ParserInterface";
 
-export class ParserProcessor {
-  private parserFactory: AbstractParserFactory;
+export class ParserProccessor {
+  private parsers: ParserInterface[] = [];
 
-  constructor(parserFactory: AbstractParserFactory) {
-    this.parserFactory = parserFactory;
-  }
+  public process(
+    selectedParser: string,
+    selectedFormat: string,
+    parsers: ParserInterface[],
+    data: string
+  ): string {
+    const parser = parsers.find((parser) =>
+      parser.canHandle({
+        format: selectedFormat || "",
+        parser: selectedParser || "",
+      })
+    );
 
-  public process({ data, format }: { data: string; format: string }) {
-    try {
-      const parser = this.parserFactory.createParser();
+    if (!parser) {
+      throw new Error("Parser not found");
+    }
 
-      const parsedObject = parser.parse({ data });
-    } catch (error) {}
+    return parser.parse({
+      data,
+      format: selectedFormat || "",
+    });
   }
 }

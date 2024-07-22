@@ -4,4 +4,6 @@ export interface PromptsInterface {
     options: Array<{ label: string; value: string }>,
     message: string
   ): Promise<string>;
+
+  input(message: string): Promise<string>;
 }

@@ -1,4 +1,4 @@
-export class ParseDTO {
+export class ParsedDTO {
   public data: string;
   public format: string;
 

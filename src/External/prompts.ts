@@ -14,7 +14,6 @@ export class Prompts implements PromptsInterface {
     if (options.length === 0) {
       throw new Error("Options must be provided and cannot be empty.");
     }
-
     const selection = await p.select({
       message,
       options: options.map((option) => ({
@@ -28,5 +27,17 @@ export class Prompts implements PromptsInterface {
     }
 
     return selection;
+  }
+
+  public async input(message: string): Promise<string> {
+    const input = await p.text({
+      message,
+    });
+
+    if (typeof input !== "string") {
+      throw new Error("Input must be a string.");
+    }
+
+    return input;
   }
 }

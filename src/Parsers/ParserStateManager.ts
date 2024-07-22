@@ -3,26 +3,46 @@ import { ParserIntroduction } from "./Steps/ParserIntroduction";
 import { SelectParser } from "./Steps/SelectParser";
 import { SelectFormat } from "./Steps/SelectFormat";
 import { ParserInterface } from "./ParserInterface";
+import { ReaderInterface } from "./ReaderInterface";
+import { ParserProccessor } from "./Steps/ParserProcessor";
+import { InputDataProcessor } from "./Steps/InputDataProcessor";
+import { SelectPath } from "./Steps/SelectPath";
 
 export class ParserStateManager {
   private parsers: ParserInterface[];
+  private readers: ReaderInterface[];
   private introduction: ParserIntroduction;
+  private parserProcessor: ParserProccessor;
+  private inputDataProcessor: InputDataProcessor;
   private selectParser: SelectParser;
   private selectFormat: SelectFormat;
+  private selectPath: SelectPath;
+
+  private selectedPath: string | undefined;
   private selectedParser: string | undefined;
   private selectedFormat: string | undefined;
+
+  private inputData: string | undefined;
   private result: string | undefined;
 
   constructor(
     parsers: ParserInterface[],
+    readers: ReaderInterface[],
     introduction: ParserIntroduction,
     selectParser: SelectParser,
-    selectFormat: SelectFormat
+    selectFormat: SelectFormat,
+    selectPath: SelectPath,
+    parserProcessor: ParserProccessor,
+    inputDataProcessor: InputDataProcessor
   ) {
     this.parsers = parsers;
+    this.readers = readers;
     this.introduction = introduction;
     this.selectParser = selectParser;
     this.selectFormat = selectFormat;
+    this.selectPath = selectPath;
+    this.parserProcessor = parserProcessor;
+    this.inputDataProcessor = inputDataProcessor;
   }
 
   public async next({
@@ -38,57 +58,52 @@ export class ParserStateManager {
         break;
 
       case ParserStates.STATE_PARSER_INITIALIZED:
-        const selectedParser = await this.selectParser.select();
-        this.selectedParser = selectedParser;
+        this.selectedParser = await this.selectParser.select();
         this.next({
           currentState: ParserStates.STATE_PARSER_SELECTED,
         });
         break;
 
       case ParserStates.STATE_PARSER_SELECTED:
-        this.selectFormat.setParser(this.selectedParser || "");
-        const selectedFormat = await this.selectFormat.select();
-        this.selectedFormat = selectedFormat;
+        this.selectedFormat = await this.selectFormat.select(
+          this.selectedParser || ""
+        );
         this.next({
           currentState: ParserStates.STATE_FORMAT_SELECTED,
         });
         break;
 
       case ParserStates.STATE_FORMAT_SELECTED:
-        const parser = this.parsers.find((parser) =>
-          parser.canHandle({
-            format: this.selectedFormat || "",
-            parser: this.selectedParser || "",
-          })
-        );
-
-        if (!parser) {
-          throw new Error("Parser not found");
-        }
-
-        this.result = parser.parse({
-          data: "<root><item>Hello World</item></root>",
-          format: this.selectedFormat || "",
+        this.selectedPath = await this.selectPath.input();
+        this.next({
+          currentState: ParserStates.STATE_PATH_SELECTED,
         });
-
-        console.log(this.result);
-        this.next({ currentState: ParserStates.STATE_PARSER_PARSED });
         break;
 
-      case ParserStates.STATE_PARSER_INITIALIZED:
-        // Parse data
+      case ParserStates.STATE_PATH_SELECTED:
+        this.inputData = this.inputDataProcessor.process({
+          readers: this.readers,
+          path: this.selectedPath || "",
+        });
+        this.next({
+          currentState: ParserStates.STATE_DATA_READ,
+        });
+        break;
+
+      case ParserStates.STATE_DATA_READ:
+        this.result = this.parserProcessor.process(
+          this.selectedParser || "",
+          this.selectedFormat || "",
+          this.parsers,
+          this.inputData || ""
+        );
+        this.next({ currentState: ParserStates.STATE_PARSER_PARSED });
+
+        console.log(this.result);
         break;
 
       case ParserStates.STATE_PARSER_PARSED:
-        // Output data
-        break;
-
-      case ParserStates.STATE_PARSER_OUTPUTED:
-        // Save data
-        break;
-
-      case ParserStates.STATE_PARSER_SAVED:
-        // Exit - good bye
+        // this.parserProcessor.output(this.result);
         break;
 
       default:

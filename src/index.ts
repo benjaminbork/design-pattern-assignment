@@ -8,22 +8,38 @@ import { ParserStates } from "./Parsers/ParserStates";
 import { SelectParser } from "./Parsers/Steps/SelectParser";
 import { SelectFormat } from "./Parsers/Steps/SelectFormat";
 import { XMLParserFactory } from "./Parsers/Factories/XMLParserFactory";
+import { ParserProccessor } from "./Parsers/Steps/ParserProcessor";
+import { LocalReaderFactory } from "./Parsers/Factories/LocalReaderFactory";
+import { SelectPath } from "./Parsers/Steps/SelectPath";
+import { InputDataProcessor } from "./Parsers/Steps/InputDataProcessor";
 
 async function main() {
   const prompts = new PromptsAdapter(new Prompts());
   const introduction = new ParserIntroduction(prompts);
   const selectParser = new SelectParser(prompts);
   const selectFormat = new SelectFormat(prompts);
+  const selectPath = new SelectPath(prompts);
+  const parserProcessor = new ParserProccessor();
+  const inputDataProcessor = new InputDataProcessor();
+
   const xmlParserLocal = new XMLParserFactory().createParser();
 
+  const localReader = new LocalReaderFactory().createReader();
+
   const parsers = [xmlParserLocal];
+  const readers = [localReader];
 
   const manager = new ParserStateManager(
     parsers,
+    readers,
     introduction,
     selectParser,
-    selectFormat
+    selectFormat,
+    selectPath,
+    parserProcessor,
+    inputDataProcessor
   );
+
   manager.next({ currentState: ParserStates.STATE_APP_STARTED });
 
   // p.outro(
