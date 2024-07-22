@@ -12,6 +12,7 @@
   "description": "",
   "dependencies": {
     "@clack/prompts": "^0.7.0",
+    "axios": "^1.7.2",
     "picocolors": "^1.0.1",
     "xmldom": "^0.6.0"
   },

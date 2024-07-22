@@ -81,7 +81,7 @@ export class ParserStateManager {
         break;
 
       case ParserStates.STATE_PATH_SELECTED:
-        this.inputData = this.inputDataProcessor.process({
+        this.inputData = await this.inputDataProcessor.process({
           readers: this.readers,
           path: this.selectedPath || "",
         });

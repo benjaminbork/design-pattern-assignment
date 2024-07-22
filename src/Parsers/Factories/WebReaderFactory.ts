@@ -1,23 +1,22 @@
-import fs from "fs";
-import path from "path";
+import axios from "axios";
 import { AbstractReaderFactory } from "../AbstractReaderFactory";
 import { ReaderInterface } from "../ReaderInterface";
 
-export class LocalReaderFactory extends AbstractReaderFactory {
+export class WebReaderFactory extends AbstractReaderFactory {
   public createReader(): ReaderInterface {
     return new (class implements ReaderInterface {
       public async read({ path }: { path: string }): Promise<string> {
-        const data = fs.readFileSync(path, { encoding: "utf-8" });
+        const response = await axios.get(path);
 
-        if (!data) {
+        if (!response) {
           throw new Error("File not found");
         }
 
-        return data;
+        return response.data;
       }
 
       public canHandle({ path }: { path: string }): boolean {
-        return path.startsWith("/");
+        return path.startsWith("http");
       }
     })();
   }

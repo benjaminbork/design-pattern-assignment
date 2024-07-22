@@ -12,6 +12,7 @@ import { ParserProccessor } from "./Parsers/Steps/ParserProcessor";
 import { LocalReaderFactory } from "./Parsers/Factories/LocalReaderFactory";
 import { SelectPath } from "./Parsers/Steps/SelectPath";
 import { InputDataProcessor } from "./Parsers/Steps/InputDataProcessor";
+import { WebReaderFactory } from "./Parsers/Factories/WebReaderFactory";
 
 async function main() {
   const prompts = new PromptsAdapter(new Prompts());
@@ -25,9 +26,10 @@ async function main() {
   const xmlParserLocal = new XMLParserFactory().createParser();
 
   const localReader = new LocalReaderFactory().createReader();
+  const webReader = new WebReaderFactory().createReader();
 
   const parsers = [xmlParserLocal];
-  const readers = [localReader];
+  const readers = [localReader, webReader];
 
   const manager = new ParserStateManager(
     parsers,
