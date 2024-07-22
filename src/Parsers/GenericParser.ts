@@ -1,4 +1,4 @@
-import { ParserInterface } from "./ParserInterface";
+import { ParserInterface } from "./InterfaceParser";
 
 export class GenericParser {
   private parsers: ParserInterface[];

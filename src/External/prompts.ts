@@ -1,6 +1,6 @@
 import * as p from "@clack/prompts";
 import color from "picocolors";
-import { PromptsInterface } from "../Parser/PromptsInterface";
+import { PromptsInterface } from "../Parsers/PromptsInterface";
 
 export class Prompts implements PromptsInterface {
   public intro(introductionText: string): void {
