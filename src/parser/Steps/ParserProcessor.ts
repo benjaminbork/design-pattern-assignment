@@ -1,4 +1,4 @@
-import { AbstractParserFactory } from "../AbtractParserFactory";
+import { AbstractParserFactory } from "../AbstractParserFactory";
 
 export class ParserProcessor {
   private parserFactory: AbstractParserFactory;

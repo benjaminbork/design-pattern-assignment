@@ -5,32 +5,21 @@ import { Prompts } from "./External/prompts";
 import { ParserStateManager } from "./Parser/ParserStateManager";
 import { ParserIntroduction } from "./Parser/Steps/ParserIntroduction";
 import { ParserStates } from "./Parser/ParserStates";
-
-// Patterns I want to use:
-// 1. State pattern
-// 2. Strategy pattern
-// 3. Abstract Factory pattern
-// 4. Factory pattern
-// 5. Adapter pattern for external libraries
-
-// Focuse first on the parser, then maybe on the cli interface
+import { SelectParser } from "./Parser/Steps/SelectParser";
+import { SelectFormat } from "./Parser/Steps/SelectFormat";
 
 async function main() {
   const prompts = new PromptsAdapter(new Prompts());
   const introduction = new ParserIntroduction(prompts);
+  const selectParser = new SelectParser(prompts);
+  const selectFormat = new SelectFormat(prompts);
 
-  const manager = new ParserStateManager(introduction);
-  manager.next({ currentState: ParserStates.STATE_PARSER_INITIALIZED });
-
-  // prompts.intro();
-
-  // await p.select({
-  //   message: "Select a parser",
-  //   options: [
-  //     { value: "XMLLocalParser", label: "XML Local Parser" },
-  //     { value: "XMLRemoteParser", label: "XML Remote Parser" },
-  //   ],
-  // });
+  const manager = new ParserStateManager(
+    introduction,
+    selectParser,
+    selectFormat
+  );
+  manager.next({ currentState: ParserStates.STATE_APP_STARTED });
 
   // await p.select({
   //   message: "Select a target format",

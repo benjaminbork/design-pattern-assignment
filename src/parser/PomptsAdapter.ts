@@ -7,7 +7,14 @@ export class PromptsAdapter implements PromptsInterface {
     this.prompts = prompts;
   }
 
-  public intro(): void {
-    return this.prompts.intro();
+  public intro(introductionText: string): void {
+    return this.prompts.intro(introductionText);
+  }
+
+  public async select(
+    options: Array<{ label: string; value: string }>,
+    message: string
+  ): Promise<string> {
+    return await this.prompts.select(options, message);
   }
 }

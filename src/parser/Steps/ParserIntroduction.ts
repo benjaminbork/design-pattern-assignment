@@ -8,6 +8,8 @@ export class ParserIntroduction {
   }
 
   public intro(): void {
-    return this.prompts.intro();
+    this.prompts.intro(
+      "Welcome to the parser. Please select an option from the list below."
+    );
   }
 }
